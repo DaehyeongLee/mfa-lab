@@ -1,35 +1,103 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-interface NavLinkProps {
-  href: string;
-  children: React.ReactNode;
-}
+const Nav = styled.nav`
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+`;
 
-const NavLink: React.FC<NavLinkProps> = ({ href, children }) => (
-  <a href={href} style={{ color: 'white', marginRight: '1rem' }}>
-    {children}
-  </a>
-);
+const NavContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Logo = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3436;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #0984e3;
+  }
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  gap: 2rem;
+`;
+
+const NavLink = styled.a<{ active: boolean }>`
+  color: ${props => props.active ? '#0984e3' : '#2d3436'};
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #0984e3;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: ${props => props.active ? '100%' : '0'};
+    height: 2px;
+    background-color: #0984e3;
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+`;
 
 const GNB: React.FC = () => {
+  const [activeLink, setActiveLink] = useState('tech-stack');
+
   return (
-    <nav
-      style={{
-        backgroundColor: '#333',
-        color: 'white',
-        padding: '1rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <div className="logo">Micro Frontend Demo</div>
-      <div className="nav-links">
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/about">About</NavLink>
-        <NavLink href="/contact">Contact</NavLink>
-      </div>
-    </nav>
+    <Nav>
+      <NavContainer>
+        <Logo>Portfolio</Logo>
+        <NavLinks>
+          <NavLink 
+            href="#tech-stack" 
+            active={activeLink === 'tech-stack'}
+            onClick={() => setActiveLink('tech-stack')}
+          >
+            Tech Stack
+          </NavLink>
+          <NavLink 
+            href="#project" 
+            active={activeLink === 'project'}
+            onClick={() => setActiveLink('project')}
+          >
+            Project
+          </NavLink>
+          <NavLink 
+            href="#about" 
+            active={activeLink === 'about'}
+            onClick={() => setActiveLink('about')}
+          >
+            About Me
+          </NavLink>
+        </NavLinks>
+      </NavContainer>
+    </Nav>
   );
 };
 
